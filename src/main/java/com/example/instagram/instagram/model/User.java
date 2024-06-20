@@ -14,7 +14,7 @@ import java.util.List;
 @Table(name = "USERS")
 public class User extends BaseEntity implements UserDetails {
     @Column(name = "USERNAME")
-    private String name;
+    private String loginUsername;
     @Column(name = "EMAIL")
     private String email;
     @JsonIgnore
@@ -24,8 +24,8 @@ public class User extends BaseEntity implements UserDetails {
     public User() {
     }
 
-    public User(String name, String email, String password) {
-        this.name = name;
+    public User(String loginUsername, String email, String password) {
+        this.loginUsername = loginUsername;
         this.email = email;
         this.password = password;
     }
@@ -52,15 +52,12 @@ public class User extends BaseEntity implements UserDetails {
         return List.of();
     }
 
-    @Override
-    public String getUsername() { return email; }
-
-    public String getName() {
-        return name;
+    public String getLoginUsername() {
+        return loginUsername;
     }
 
-    public void setName(String username) {
-        this.name = name;
+    public void setLoginUsername(String loginUsername) {
+        this.loginUsername = loginUsername;
     }
 
     public String getEmail() {
@@ -84,12 +81,17 @@ public class User extends BaseEntity implements UserDetails {
         return "User{" +
                 "id='" + getId() + '\'' +
                 ", uuid='" + getUuid() + '\'' +
-                ", username='" + getName() + '\'' +
+                ", login_username='" + getLoginUsername() + '\'' +
                 ", email='" + getEmail() + '\'' +
                 ", created_at='" + getCreatedAt() + '\'' +
                 ", created_by='" + getCreatedBy() + '\'' +
                 ", updated_at='" + getUpdatedAt() + '\'' +
                 ", updated_by='" + getUpdatedBy() + '\'' +
                 '}';
+    }
+
+    @Override
+    public String getUsername() {
+        return loginUsername;
     }
 }

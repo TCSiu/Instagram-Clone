@@ -1,18 +1,19 @@
 package com.example.instagram.instagram.service.impl;
 
+import com.example.instagram.instagram.model.User;
 import com.example.instagram.instagram.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
+
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +21,8 @@ import java.util.function.Function;
 
 @Service
 public class JwtImpl implements JwtService {
+    @Autowired
+    private Logger logger;
 
     @Value("${security.jwt.secret-key}")
     private String secretKey;
@@ -28,7 +31,7 @@ public class JwtImpl implements JwtService {
     private long jwtExpiration;
 
     @Override
-    public String extractUsername(String token) {
+    public String extractUuid(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -39,13 +42,13 @@ public class JwtImpl implements JwtService {
     }
 
     @Override
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+    public String generateToken(User user) {
+        return generateToken(new HashMap<>(), user);
     }
 
     @Override
-    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return buildToken(extraClaims, userDetails, jwtExpiration);
+    public String generateToken(Map<String, Object> extraClaims, User user) {
+        return buildToken(extraClaims, user, jwtExpiration);
     }
 
     @Override
@@ -54,10 +57,10 @@ public class JwtImpl implements JwtService {
     }
 
     @Override
-    public String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, long expiration) {
+    public String buildToken(Map<String, Object> extraClaims, User user, long expiration) {
         return Jwts.builder()
                 .claims(extraClaims)
-                .subject(userDetails.getUsername())
+                .subject(user.getUuid())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSignInKey())
@@ -65,9 +68,9 @@ public class JwtImpl implements JwtService {
     }
 
     @Override
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+    public boolean isTokenValid(String token, User user) {
+        final String uuid = extractUuid(token);
+        return (uuid.equals(user.getUuid())) && !isTokenExpired(token);
     }
 
     @Override

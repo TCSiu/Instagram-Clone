@@ -1,6 +1,9 @@
 package com.example.instagram.instagram.config;
 
 import com.example.instagram.instagram.repository.UserRepository;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -45,6 +48,11 @@ public class ApplicationConfig {
         authProvider.setPasswordEncoder(passwordEncoder());
 
         return authProvider;
+    }
+
+    @Bean
+    public Logger getLogger() {
+        return LoggerFactory.getLogger(ApplicationConfig.class);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.instagram.instagram.config;
 
+import com.example.instagram.instagram.service.CustomUserDetailsService;
 import com.example.instagram.instagram.service.impl.JwtImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -24,11 +25,11 @@ import java.io.IOException;
 public class JwtAuthenticationFilter  extends OncePerRequestFilter {
     private final HandlerExceptionResolver handlerExceptionResolver;
     private final JwtImpl jwtImpl;
-    private final UserDetailsService userDetailsService;
+    private final CustomUserDetailsService userDetailsService;
 
     public JwtAuthenticationFilter(
             JwtImpl jwtImpl,
-            UserDetailsService userDetailsService,
+            CustomUserDetailsService userDetailsService,
             HandlerExceptionResolver handlerExceptionResolver
     ) {
         this.jwtImpl = jwtImpl;
@@ -51,12 +52,12 @@ public class JwtAuthenticationFilter  extends OncePerRequestFilter {
 
         try {
             final String jwt = authHeader.substring(7);
-            final String userEmail = jwtImpl.extractUsername(jwt);
+            final String userUuid = jwtImpl.extractUuid(jwt);
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-            if (userEmail != null && authentication == null) {
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+            if (userUuid != null && authentication == null) {
+                UserDetails userDetails = this.userDetailsService.loadUserByUserUuid(userUuid);
                 if (jwtImpl.isTokenValid(jwt, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
