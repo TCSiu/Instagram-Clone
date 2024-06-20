@@ -1,12 +1,14 @@
 package com.example.instagram.instagram.service.impl;
 
+import com.example.instagram.instagram.model.CustomUserDetails;
 import com.example.instagram.instagram.model.User;
+import com.example.instagram.instagram.repository.UserRepository;
 import com.example.instagram.instagram.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
-
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,8 +24,6 @@ import java.util.function.Function;
 
 @Service
 public class JwtImpl implements JwtService {
-    @Autowired
-    private Logger logger;
 
     @Value("${security.jwt.secret-key}")
     private String secretKey;
@@ -68,9 +69,9 @@ public class JwtImpl implements JwtService {
     }
 
     @Override
-    public boolean isTokenValid(String token, User user) {
+    public boolean isTokenValid(String token, CustomUserDetails userDetails) {
         final String uuid = extractUuid(token);
-        return (uuid.equals(user.getUuid())) && !isTokenExpired(token);
+        return (uuid.equals(userDetails.getUuid())) && !isTokenExpired(token);
     }
 
     @Override

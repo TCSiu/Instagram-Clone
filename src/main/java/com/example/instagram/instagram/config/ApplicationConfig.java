@@ -30,7 +30,7 @@ public class ApplicationConfig {
     }
 
     @Bean
-    UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService() {
         return username -> userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
@@ -49,10 +49,4 @@ public class ApplicationConfig {
 
         return authProvider;
     }
-
-    @Bean
-    public Logger getLogger() {
-        return LoggerFactory.getLogger(ApplicationConfig.class);
-    }
-
 }

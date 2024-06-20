@@ -8,6 +8,8 @@ import com.example.instagram.instagram.response.user.GetUsersResponse;
 import com.example.instagram.instagram.response.user.data.GetMeResponseData;
 import com.example.instagram.instagram.response.user.data.GetUsersResponseData;
 import com.example.instagram.instagram.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,15 +28,20 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/me")
-    public ResponseEntity<BaseResponse<BaseResponseData>> authenticatedUser() {
+    public Object authenticatedUser() {
+//    public ResponseEntity<BaseResponse<BaseResponseData>> authenticatedUser() {
+        Logger logger = LoggerFactory.getLogger(UserController.class);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         User currentUser = (User) authentication.getPrincipal();
 
-        GetMeResponseData responseData = new GetMeResponseData(currentUser);
-        GetMeResponse response = new GetMeResponse(responseData, "Get user data success!");
+//        return currentUser.getFollowers();
+        return currentUser.getFollowerList();
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+//        GetMeResponseData responseData = new GetMeResponseData(currentUser);
+//        GetMeResponse response = new GetMeResponse(responseData, "Get user data success!");
+//
+//        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("")

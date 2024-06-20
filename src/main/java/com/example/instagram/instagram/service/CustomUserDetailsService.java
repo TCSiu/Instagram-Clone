@@ -7,28 +7,30 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.example.instagram.instagram.model.User;
 import com.example.instagram.instagram.repository.UserRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CustomUserDetailsService implements UserDetailsService {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public CustomUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email)
+        return userRepository.findByEmail(email)
             .orElseThrow(() -> new UsernameNotFoundException("User not found with email " + email));
-        return user;
     }
 
     public UserDetails loadUserByUsernameOrEmail(String usernameOrEmail) throws UsernameNotFoundException {
-        User user = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
+        return userRepository.findByLoginUsernameOrEmail(usernameOrEmail, usernameOrEmail)
             .orElseThrow(() -> new UsernameNotFoundException("User not found with username or email " + usernameOrEmail));
-        return user;
     }
 
-    public UserDetails loadUserByUserUuid(String userUuid) throws UsernameNotFoundException {
-        User user = userRepository.findByUserUuid(userUuid)
+    public UserDetails loadUserByUuid(String userUuid) throws UsernameNotFoundException {
+        return userRepository.findByUuid(userUuid)
             .orElseThrow(() -> new UsernameNotFoundException("User not found with uuid " + userUuid));
-        return user;
     }
     
 }

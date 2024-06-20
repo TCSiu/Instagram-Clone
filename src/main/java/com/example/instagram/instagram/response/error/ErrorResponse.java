@@ -1,8 +1,5 @@
 package com.example.instagram.instagram.response.error;
 
-import com.example.instagram.instagram.response.BaseResponse;
-import com.example.instagram.instagram.response.BaseResponseData;
-
 public class ErrorResponse {
     private String message;
     public ErrorResponse() {

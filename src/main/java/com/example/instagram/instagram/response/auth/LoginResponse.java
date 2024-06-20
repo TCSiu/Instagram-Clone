@@ -1,9 +1,7 @@
 package com.example.instagram.instagram.response.auth;
 
-import com.example.instagram.instagram.model.User;
 import com.example.instagram.instagram.response.BaseResponse;
 import com.example.instagram.instagram.response.BaseResponseData;
-import com.example.instagram.instagram.response.auth.data.LoginResponseData;
 
 public class LoginResponse implements BaseResponse<BaseResponseData> {
     private BaseResponseData data;

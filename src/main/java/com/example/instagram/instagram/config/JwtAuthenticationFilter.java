@@ -1,13 +1,12 @@
 package com.example.instagram.instagram.config;
 
+import com.example.instagram.instagram.model.CustomUserDetails;
 import com.example.instagram.instagram.service.CustomUserDetailsService;
 import com.example.instagram.instagram.service.impl.JwtImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -42,7 +41,6 @@ public class JwtAuthenticationFilter  extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
         final String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -57,7 +55,7 @@ public class JwtAuthenticationFilter  extends OncePerRequestFilter {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
             if (userUuid != null && authentication == null) {
-                UserDetails userDetails = this.userDetailsService.loadUserByUserUuid(userUuid);
+                CustomUserDetails userDetails = (CustomUserDetails) this.userDetailsService.loadUserByUuid(userUuid);
                 if (jwtImpl.isTokenValid(jwt, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,

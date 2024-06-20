@@ -2,7 +2,6 @@ package com.example.instagram.instagram.response.user;
 
 import com.example.instagram.instagram.response.BaseResponse;
 import com.example.instagram.instagram.response.BaseResponseData;
-import com.example.instagram.instagram.response.user.data.GetMeResponseData;
 
 public class GetMeResponse implements BaseResponse<BaseResponseData> {
     private BaseResponseData data;

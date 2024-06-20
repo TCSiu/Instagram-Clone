@@ -1,7 +1,9 @@
 package com.example.instagram.instagram.service;
 
+import com.example.instagram.instagram.model.CustomUserDetails;
 import io.jsonwebtoken.Claims;
 import com.example.instagram.instagram.model.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.security.Key;
 import java.util.Date;
@@ -15,7 +17,7 @@ public interface JwtService {
     String generateToken(Map<String, Object> extraClaims, User user);
     long getExpirationTime();
     String buildToken(Map<String, Object> extraClaims, User user, long expiration);
-    boolean isTokenValid(String token, User user);
+    boolean isTokenValid(String token, CustomUserDetails userDetails);
     boolean isTokenExpired(String token);
     Date extractExpiration(String token);
     Claims extractAllClaims(String token);

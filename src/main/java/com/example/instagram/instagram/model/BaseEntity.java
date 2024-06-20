@@ -2,6 +2,7 @@ package com.example.instagram.instagram.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
@@ -13,6 +14,7 @@ public abstract class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", updatable = false)
     private Long id;
+    @NaturalId
     @UuidGenerator
     @Column(name = "UUID", updatable = false)
     private String uuid;
@@ -24,6 +26,9 @@ public abstract class BaseEntity {
     @UpdateTimestamp
     @Column(name = "UPDATED_AT")
     private Date updatedAt;
+
+    @Column(name = "UPDATED_BY")
+    private int updatedBy;
 
     public int getUpdatedBy() {
         return updatedBy;
@@ -72,7 +77,4 @@ public abstract class BaseEntity {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
-
-    @Column(name = "UPDATED_BY")
-    private int updatedBy;
 }
