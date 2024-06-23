@@ -1,18 +1,14 @@
 package com.example.instagram.instagram.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.Set;
 
-@Entity
-@Table(name = "USERS")
+@Entity(name = "users")
+@Table(name = "users")
 public class User extends BaseEntity implements CustomUserDetails {
     @Column(name = "USERNAME")
     private String loginUsername;
@@ -21,13 +17,20 @@ public class User extends BaseEntity implements CustomUserDetails {
     @JsonIgnore
     @Column(name = "PASSWORD")
     private String password;
-    @JsonIgnore
-    @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Follows> followers = new HashSet<>();
-    @JsonIgnore
-    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Follows> followings = new HashSet<>();
 
+//    @JsonIgnore
+    @OneToMany(mappedBy = "following"
+            , cascade = CascadeType.ALL
+    )
+    private Set<Follows> followers;
+//    @JsonIgnore
+    @OneToMany(mappedBy = "follower"
+            , cascade = CascadeType.ALL
+    )
+    private Set<Follows> followings;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_information_uuid", referencedColumnName = "uuid")
+    private UserInformation userInformation;
     public User() {
     }
 
@@ -105,19 +108,6 @@ public class User extends BaseEntity implements CustomUserDetails {
 
     public void setFollowings(Set<Follows> followings) {
         this.followings = followings;
-    }
-
-    public Object getFollowerList() {
-        List<User> temp = new ArrayList<>();
-        for (Follows f: followings) {
-            temp.add(f.getFollowing());
-        }
-        return temp;
-//        return followings;
-    }
-
-    public static User extractFollowing(Follows follows) {
-        return follows.getFollower();
     }
 
     @Override

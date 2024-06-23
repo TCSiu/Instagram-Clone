@@ -25,7 +25,6 @@ public class AuthController {
     @Autowired
     private AuthenticationService authenticationService;
 
-
     @PostMapping("/register")
     public ResponseEntity<BaseResponse<BaseResponseData>> register(@RequestBody RegisterDto registerDto) {
         User user = authenticationService.register(registerDto);

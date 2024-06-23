@@ -1,16 +1,19 @@
 package com.example.instagram.instagram.model;
 
 import com.example.instagram.instagram.common.FollowStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-@Entity
+@Entity(name = "follows")
 @Table(name = "follows")
 public class Follows extends BaseEntity {
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonIgnore
+    @ManyToOne
     @JoinColumn(name = "following_uuid", nullable = false, referencedColumnName = "uuid")
     private User following;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonIgnore
+    @ManyToOne
     @JoinColumn(name = "follower_uuid", nullable = false, referencedColumnName = "uuid")
     private User follower;
 

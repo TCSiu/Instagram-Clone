@@ -12,10 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/follow")
@@ -30,8 +27,26 @@ public class FollowController {
     public Boolean followUser(@PathVariable(value = "userUuid") String userUuid) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        CustomUserDetails currentUser = (CustomUserDetails) authentication.getPrincipal();
+        String currentUserUuid = (String) authentication.getPrincipal();
 
-        return followService.followUser(userUuid, currentUser);
+        return followService.followUser(userUuid, currentUserUuid);
+    }
+
+    @GetMapping("/{followRequestUuid}/approve")
+    public Boolean followRequestApprove(@PathVariable(value = "followRequestUuid") String requestUuid) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String currentUserUuid = (String) authentication.getPrincipal();
+
+        return followService.followRequestApprove(currentUserUuid, requestUuid);
+    }
+
+    @GetMapping("/{followRequestUuid}/reject")
+    public Boolean followRequestReject(@PathVariable(value = "followRequestUuid") String requestUuid) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String currentUserUuid = (String) authentication.getPrincipal();
+
+        return followService.followRequestReject(currentUserUuid, requestUuid);
     }
 }

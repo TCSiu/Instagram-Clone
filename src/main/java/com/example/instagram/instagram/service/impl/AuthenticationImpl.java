@@ -6,8 +6,10 @@ import com.example.instagram.instagram.exception.EmailExistsException;
 import com.example.instagram.instagram.exception.EmailNotFoundException;
 import com.example.instagram.instagram.exception.PasswordUnmatchedException;
 import com.example.instagram.instagram.model.User;
+import com.example.instagram.instagram.model.UserInformation;
 import com.example.instagram.instagram.repository.UserRepository;
 import com.example.instagram.instagram.service.AuthenticationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,6 +39,7 @@ public class AuthenticationImpl implements AuthenticationService {
         if (userRepository.findByEmail(registerDto.getEmail()).isPresent()) {
             throw new EmailExistsException("Email already exists!");
         }
+        UserInformation newUserInformation = new UserInformation();
         User newUser = new User(
                 registerDto.getName(),
                 registerDto.getEmail(),
@@ -47,13 +50,14 @@ public class AuthenticationImpl implements AuthenticationService {
 
     @Override
     public User authenticate(LoginDto loginDto) {
+        User user = userRepository.findByEmail(loginDto.getEmail())
+                .orElseThrow(() -> new EmailNotFoundException("Email Not Found"));
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                     loginDto.getEmail(),
                     loginDto.getPassword()
             )
         );
-        return userRepository.findByEmail(loginDto.getEmail())
-                .orElseThrow(() -> new EmailNotFoundException("Email Not Found"));
+        return user;
     }
 }

@@ -33,15 +33,14 @@ public class UserController {
         Logger logger = LoggerFactory.getLogger(UserController.class);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        User currentUser = (User) authentication.getPrincipal();
+        String userUuid = (String) authentication.getPrincipal();
 
-//        return currentUser.getFollowers();
-        return currentUser.getFollowerList();
+        User currentUser = userService.getUser(userUuid);
 
-//        GetMeResponseData responseData = new GetMeResponseData(currentUser);
-//        GetMeResponse response = new GetMeResponse(responseData, "Get user data success!");
-//
-//        return new ResponseEntity<>(response, HttpStatus.OK);
+        GetMeResponseData responseData = new GetMeResponseData(currentUser);
+        GetMeResponse response = new GetMeResponse(responseData, "Get user data success!");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("")
