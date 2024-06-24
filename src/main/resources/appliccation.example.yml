@@ -1,0 +1,19 @@
+server:
+  port: 
+spring:
+  application:
+    name: 
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: none
+  datasource:
+    url: 
+    username: 
+    password: 
+security:
+  jwt:
+    secret-key: 
+    expiration-time: 3600000
+
