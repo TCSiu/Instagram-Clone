@@ -18,15 +18,9 @@ public class User extends BaseEntity implements CustomUserDetails {
     @Column(name = "PASSWORD")
     private String password;
 
-//    @JsonIgnore
-    @OneToMany(mappedBy = "following"
-            , cascade = CascadeType.ALL
-    )
+    @OneToMany(mappedBy = "following", cascade = CascadeType.ALL)
     private Set<Follows> followers;
-//    @JsonIgnore
-    @OneToMany(mappedBy = "follower"
-            , cascade = CascadeType.ALL
-    )
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
     private Set<Follows> followings;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_information_uuid", referencedColumnName = "uuid")
@@ -108,6 +102,12 @@ public class User extends BaseEntity implements CustomUserDetails {
 
     public void setFollowings(Set<Follows> followings) {
         this.followings = followings;
+    }
+
+    public UserInformation getUserInformation() { return userInformation; }
+
+    public void setUserInformation(UserInformation userInformation) {
+        this.userInformation = userInformation;
     }
 
     @Override

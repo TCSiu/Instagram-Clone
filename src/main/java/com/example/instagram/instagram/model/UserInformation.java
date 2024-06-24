@@ -1,7 +1,9 @@
 package com.example.instagram.instagram.model;
 
+import com.example.instagram.instagram.Dto.UserInformationDto;
 import com.example.instagram.instagram.common.Gender;
 import jakarta.persistence.*;
+import org.apache.commons.lang3.EnumUtils;
 
 @Entity(name = "user_information")
 @Table(name = "user_information")
@@ -59,5 +61,12 @@ public class UserInformation extends BaseEntity {
 
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    public void update(UserInformationDto userInformationDto) {
+        if (userInformationDto.getFirst_name() != null && ! userInformationDto.getFirst_name().isEmpty()) this.firstName = userInformationDto.getFirst_name();
+        if (userInformationDto.getLast_name() != null && ! userInformationDto.getLast_name().isEmpty()) this.lastName = userInformationDto.getLast_name();
+        if (userInformationDto.getAge() != null && userInformationDto.getAge() > 0) this.age = userInformationDto.getAge();
+        if (userInformationDto.getGender() != null && ! userInformationDto.getGender().isEmpty()) this.gender = EnumUtils.getEnum(Gender.class, userInformationDto.getGender().toUpperCase());
     }
 }
