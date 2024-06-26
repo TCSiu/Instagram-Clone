@@ -2,7 +2,6 @@ package com.example.instagram.instagram.controller;
 
 import com.example.instagram.instagram.Dto.UserInformationDto;
 import com.example.instagram.instagram.model.User;
-import com.example.instagram.instagram.model.UserInformation;
 import com.example.instagram.instagram.response.BaseResponse;
 import com.example.instagram.instagram.response.BaseResponseData;
 import com.example.instagram.instagram.response.user.GetMeResponse;
@@ -30,8 +29,7 @@ public class UserController {
     private UserInformationService userInformationService;
 
     @GetMapping("/me")
-    public Object authenticatedUser() {
-//    public ResponseEntity<BaseResponse<BaseResponseData>> authenticatedUser() {
+    public ResponseEntity<BaseResponse<BaseResponseData>> authenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         String userUuid = (String) authentication.getPrincipal();

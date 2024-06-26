@@ -10,7 +10,6 @@ import com.example.instagram.instagram.model.UserInformation;
 import com.example.instagram.instagram.repository.UserInformationRepository;
 import com.example.instagram.instagram.repository.UserRepository;
 import com.example.instagram.instagram.service.AuthenticationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;

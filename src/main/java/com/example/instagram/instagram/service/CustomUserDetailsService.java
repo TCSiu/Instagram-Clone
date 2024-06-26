@@ -1,13 +1,11 @@
 package com.example.instagram.instagram.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
-import com.example.instagram.instagram.model.User;
-import com.example.instagram.instagram.repository.UserRepository;
 import org.springframework.stereotype.Service;
+
+import com.example.instagram.instagram.repository.UserRepository;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {

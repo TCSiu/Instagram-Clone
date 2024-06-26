@@ -1,5 +1,5 @@
 server:
-  port: 
+  port:  
 spring:
   application:
     name: 
@@ -16,4 +16,6 @@ security:
   jwt:
     secret-key: 
     expiration-time: 3600000
+storage:
+  path: 
 

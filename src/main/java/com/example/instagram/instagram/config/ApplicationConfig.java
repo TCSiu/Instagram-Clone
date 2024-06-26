@@ -1,9 +1,8 @@
 package com.example.instagram.instagram.config;
 
+import com.example.instagram.instagram.common.StorageProperties;
 import com.example.instagram.instagram.repository.UserRepository;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,6 +26,11 @@ public class ApplicationConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public StorageProperties storageProperties() {
+        return new StorageProperties();
     }
 
     @Bean

@@ -1,14 +1,14 @@
 package com.example.instagram.instagram.service;
 
-import com.example.instagram.instagram.model.CustomUserDetails;
-import io.jsonwebtoken.Claims;
-import com.example.instagram.instagram.model.User;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import java.security.Key;
 import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
+
+import com.example.instagram.instagram.model.CustomUserDetails;
+import com.example.instagram.instagram.model.User;
+
+import io.jsonwebtoken.Claims;
 
 public interface JwtService {
     String extractUuid(String token);

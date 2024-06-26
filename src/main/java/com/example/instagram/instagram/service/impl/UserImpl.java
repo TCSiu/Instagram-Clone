@@ -1,13 +1,13 @@
 package com.example.instagram.instagram.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.example.instagram.instagram.model.User;
 import com.example.instagram.instagram.repository.UserRepository;
 import com.example.instagram.instagram.service.UserService;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserImpl implements UserService {

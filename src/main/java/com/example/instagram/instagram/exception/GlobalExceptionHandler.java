@@ -38,4 +38,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> HandleBadCredentialsException(BadCredentialsException exception) {
         return this.generateResponseEntity(HttpStatus.BAD_REQUEST, exception);
     }
+
+    @ExceptionHandler({StorageException .class})
+    public ResponseEntity<ErrorResponse> HandleStorageException(StorageException  exception) {
+        return this.generateResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, exception);
+    }
+
+    @ExceptionHandler({StorageFileNotFoundException .class})
+    public ResponseEntity<ErrorResponse> HandleStorageFileNotFoundException(StorageFileNotFoundException  exception) {
+        return this.generateResponseEntity(HttpStatus.NOT_FOUND, exception);
+    }
 }

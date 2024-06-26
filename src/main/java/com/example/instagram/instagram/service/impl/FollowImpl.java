@@ -2,7 +2,6 @@ package com.example.instagram.instagram.service.impl;
 
 import com.example.instagram.instagram.common.FollowStatus;
 import com.example.instagram.instagram.exception.FollowingRequestNotFoundException;
-import com.example.instagram.instagram.model.CustomUserDetails;
 import com.example.instagram.instagram.model.Follows;
 import com.example.instagram.instagram.model.User;
 import com.example.instagram.instagram.repository.FollowRepository;
