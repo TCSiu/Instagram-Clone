@@ -1,6 +1,6 @@
 package com.example.instagram.instagram.config;
 
-import com.example.instagram.instagram.common.StorageProperties;
+import com.example.instagram.instagram.common.StorageProperty;
 import com.example.instagram.instagram.repository.UserRepository;
 
 import org.springframework.context.annotation.Bean;
@@ -29,9 +29,7 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public StorageProperties storageProperties() {
-        return new StorageProperties();
-    }
+    public StorageProperty storageProperty() { return new StorageProperty(); }
 
     @Bean
     public UserDetailsService userDetailsService() {
