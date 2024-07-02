@@ -23,7 +23,7 @@ public class UserImpl implements UserService {
     }
 
     @Override
-    public User getUser(String userUuid) {
+    public User getUserByUuid(String userUuid) {
         return userRepository.findByUuid(userUuid).orElse(null);
     }
 }

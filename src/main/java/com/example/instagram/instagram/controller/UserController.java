@@ -34,7 +34,7 @@ public class UserController {
 
         String userUuid = (String) authentication.getPrincipal();
 
-        User currentUser = userService.getUser(userUuid);
+        User currentUser = userService.getUserByUuid(userUuid);
 
         GetMeResponseData responseData = new GetMeResponseData(currentUser);
         GetMeResponse response = new GetMeResponse(responseData, "Get user data success!");
@@ -57,7 +57,7 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         String userUuid = (String) authentication.getPrincipal();
-        User currentUser = userService.getUser(userUuid);
+        User currentUser = userService.getUserByUuid(userUuid);
 
         userInformationService.editUserInformation(currentUser.getUuid(), userInformationDto);
 

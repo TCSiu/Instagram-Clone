@@ -1,7 +1,9 @@
 package com.example.instagram.instagram.service.impl;
 
 import com.example.instagram.instagram.common.FollowStatus;
+import com.example.instagram.instagram.exception.FollowRequestAlreadyExistsResponse;
 import com.example.instagram.instagram.exception.FollowingRequestNotFoundException;
+import com.example.instagram.instagram.exception.FollowingRequestNotOwnerException;
 import com.example.instagram.instagram.model.Follows;
 import com.example.instagram.instagram.model.User;
 import com.example.instagram.instagram.repository.FollowRepository;
@@ -17,63 +19,45 @@ public class FollowImpl implements FollowService {
     private final FollowRepository followRepository;
     private final UserRepository userRepository;
 
-    public FollowImpl(
-            FollowRepository followRepository,
-            UserRepository userRepository
-    ) {
+    public FollowImpl(FollowRepository followRepository, UserRepository userRepository) {
         this.followRepository = followRepository;
         this.userRepository = userRepository;
     }
 
     @Override
-    public Boolean followUser(String userUuid, String currentUserUuid) {
-        User follower = userRepository.findByUuid(currentUserUuid).orElseThrow(
-                () -> new UsernameNotFoundException("User Not Found")
-        );
-        User following = userRepository.findByUuid(userUuid).orElseThrow(
-                () -> new UsernameNotFoundException("User Not Found")
-        );
-        Optional<Follows> follow = followRepository.findFollowByFollowerUuidAndFollowingUuid(follower.getUuid(), following.getUuid());
-        if (follow.isEmpty()) {
-            Follows follows = new Follows();
-            follows.setFollower(follower);
-            follows.setFollowing(following);
-            follows.setStatus(FollowStatus.PENDING);
+    public Follows followUser(String userUuid, String currentUserUuid) throws FollowRequestAlreadyExistsResponse {
+        User follower = findUser(currentUserUuid);
+        User following = findUser(userUuid);
+        if (followRepository.findFollowByFollowerUuidAndFollowingUuid(follower.getUuid(), following.getUuid()).isEmpty()) {
+            Follows follows = new Follows(follower, following, FollowStatus.PENDING);
             followRepository.save(follows);
-            return true;
+            return follows;
         }
-        return false;
+        throw new FollowRequestAlreadyExistsResponse("Follow Request Already Exists");
     }
 
     @Override
-    public Boolean followRequestApprove(String currentUserUuid, String requestUuid) {
-        User follower = userRepository.findByUuid(currentUserUuid).orElseThrow(
-                () -> new UsernameNotFoundException("User Not Found")
-        );
-        Follows follow = followRepository.findFollowByUuidAndStatus(requestUuid, FollowStatus.PENDING).orElseThrow(
-                () -> new FollowingRequestNotFoundException("Request Not Found")
-        );
-        if (follow.getFollower().equals(follower)) {
-            follow.setStatus(FollowStatus.ACTIVE);
-            followRepository.save(follow);
-            return true;
-        }
-        return false;
+    public Follows followRequestApprove(String currentUserUuid, String requestUuid) {
+        return updateFollowRequest(currentUserUuid, requestUuid, FollowStatus.ACTIVE);
     }
 
     @Override
-    public Boolean followRequestReject(String currentUserUuid, String requestUuid) {
-        User follower = userRepository.findByUuid(currentUserUuid).orElseThrow(
-                () -> new UsernameNotFoundException("User Not Found")
-        );
-        Follows follow = followRepository.findFollowByUuidAndStatus(requestUuid, FollowStatus.PENDING).orElseThrow(
-                () -> new FollowingRequestNotFoundException("Request Not Found")
-        );
+    public Follows followRequestReject(String currentUserUuid, String requestUuid) {
+        return updateFollowRequest(currentUserUuid, requestUuid, FollowStatus.REJECT);
+    }
+
+    private User findUser(String userUuid) {
+        return userRepository.findByUuid(userUuid).orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
+    }
+
+    private Follows updateFollowRequest(String currentUserUuid, String requestUuid, FollowStatus status) throws FollowingRequestNotOwnerException, FollowingRequestNotFoundException {
+        User follower = findUser(currentUserUuid);
+        Follows follow = followRepository.findFollowByUuidAndStatus(requestUuid, FollowStatus.PENDING).orElseThrow(() -> new FollowingRequestNotFoundException("Request Not Found"));
         if (follow.getFollower().equals(follower)) {
-            follow.setStatus(FollowStatus.REJECT);
+            follow.setStatus(status);
             followRepository.save(follow);
-            return true;
+            return follow;
         }
-        return false;
+        throw new FollowingRequestNotOwnerException("You Have No Permission Of This Request");
     }
 }

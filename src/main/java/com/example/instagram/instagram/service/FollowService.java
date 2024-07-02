@@ -1,7 +1,9 @@
 package com.example.instagram.instagram.service;
 
+import com.example.instagram.instagram.model.Follows;
+
 public interface FollowService {
-    Boolean followUser(String userUuid, String currentUserUuid);
-    Boolean followRequestApprove(String currentUserUuid, String requestUuid);
-    Boolean followRequestReject(String currentUserUuid, String requestUuid);
+    Follows followUser(String userUuid, String currentUserUuid);
+    Follows followRequestApprove(String currentUserUuid, String requestUuid);
+    Follows followRequestReject(String currentUserUuid, String requestUuid);
 }

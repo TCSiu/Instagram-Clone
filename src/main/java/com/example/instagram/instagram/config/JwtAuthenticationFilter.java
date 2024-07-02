@@ -7,6 +7,9 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.ILoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -67,6 +70,11 @@ public class JwtAuthenticationFilter  extends OncePerRequestFilter {
             }
             filterChain.doFilter(request, response);
         } catch (Exception exception) {
+            Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+            logger.info(exception.getClass().toString());
+//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//            response.getWriter().write("Authentication failed: " + exception.getMessage());
+
             handlerExceptionResolver.resolveException(request, response, null, exception);
         }
     }

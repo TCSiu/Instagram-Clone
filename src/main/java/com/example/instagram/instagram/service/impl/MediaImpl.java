@@ -11,6 +11,10 @@ import java.util.UUID;
 
 import com.example.instagram.instagram.common.StorageProperty;
 import com.example.instagram.instagram.exception.StorageFileNotFoundException;
+import com.example.instagram.instagram.model.Media;
+import com.example.instagram.instagram.model.Post;
+import com.example.instagram.instagram.repository.MediaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -20,14 +24,17 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.instagram.instagram.exception.StorageException;
 import com.example.instagram.instagram.exception.StorageFileEmptyException;
 import com.example.instagram.instagram.exception.StorageFilePathWrongException;
-import com.example.instagram.instagram.service.StorageService;
+import com.example.instagram.instagram.service.MediaService;
 
 @Service
-public class StorageImpl implements StorageService {
+public class MediaImpl implements MediaService {
 
     private final Path storageFolderPath;
 
-    public StorageImpl(StorageProperty storageProperty) {
+    @Autowired
+    private MediaRepository mediaRepository;
+
+    public MediaImpl(StorageProperty storageProperty) {
         if (storageProperty.getPath().trim().isEmpty()) {
             throw new StorageException("File upload location can not be Empty.");
         }
@@ -45,7 +52,7 @@ public class StorageImpl implements StorageService {
     }
 
     @Override
-    public void store(MultipartFile file) throws StorageFileEmptyException, StorageFilePathWrongException {
+    public Media store(MultipartFile file, Post post) throws StorageFileEmptyException, StorageFilePathWrongException {
         try {
             if (file.isEmpty()) {
                 throw new StorageFileEmptyException("Failed to store empty file");
@@ -63,6 +70,7 @@ public class StorageImpl implements StorageService {
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
             }
+            return mediaRepository.saveImage(extension, newFileName, post);
         } catch (IOException e) {
             throw new StorageException("Failed to store file", e);
         }
