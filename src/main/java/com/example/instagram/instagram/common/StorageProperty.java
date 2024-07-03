@@ -1,7 +1,6 @@
 package com.example.instagram.instagram.common;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 public class StorageProperty {
     @Value("${storage.path}")

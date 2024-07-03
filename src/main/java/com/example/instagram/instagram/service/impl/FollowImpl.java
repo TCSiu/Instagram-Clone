@@ -1,5 +1,8 @@
 package com.example.instagram.instagram.service.impl;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
 import com.example.instagram.instagram.common.FollowStatus;
 import com.example.instagram.instagram.exception.FollowRequestAlreadyExistsResponse;
 import com.example.instagram.instagram.exception.FollowingRequestNotFoundException;
@@ -9,10 +12,6 @@ import com.example.instagram.instagram.model.User;
 import com.example.instagram.instagram.repository.FollowRepository;
 import com.example.instagram.instagram.repository.UserRepository;
 import com.example.instagram.instagram.service.FollowService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class FollowImpl implements FollowService {

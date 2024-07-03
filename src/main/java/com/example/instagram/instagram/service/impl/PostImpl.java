@@ -1,19 +1,17 @@
 package com.example.instagram.instagram.service.impl;
 
-import com.example.instagram.instagram.Dto.PostDto;
-import com.example.instagram.instagram.model.Post;
-import com.example.instagram.instagram.repository.MediaRepository;
-import com.example.instagram.instagram.repository.PostRepository;
-import com.example.instagram.instagram.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.example.instagram.instagram.Dto.PostDto;
+import com.example.instagram.instagram.model.Post;
+import com.example.instagram.instagram.repository.PostRepository;
+import com.example.instagram.instagram.service.PostService;
 
 @Service
 public class PostImpl implements PostService {
     @Autowired
     private PostRepository postRepository;
-    @Autowired
-    private MediaRepository mediaRepository;
 
     @Override
     public Post savePost(PostDto postDto, String userUuid) {

@@ -1,40 +1,54 @@
 package com.example.instagram.instagram.model;
 
-import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.sql.Date;
+import jakarta.persistence.Column;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", updatable = false)
     private Long id;
+
     @NaturalId
     @UuidGenerator
     @Column(name = "UUID", updatable = false)
     private String uuid;
-    @CreationTimestamp
+
+    @CreatedDate
     @Column(name = "CREATED_AT", updatable = false)
-    private Date createdAt;
+    private Long createdAt;
+
+    @CreatedBy
     @Column(name = "CREATED_BY", updatable = false)
-    private int createdBy;
-    @UpdateTimestamp
+    private String createdBy;
+
+    @LastModifiedDate
     @Column(name = "UPDATED_AT")
-    private Date updatedAt;
+    private Long updatedAt;
 
+    @LastModifiedBy
     @Column(name = "UPDATED_BY")
-    private int updatedBy;
+    private String updatedBy;
 
-    public int getUpdatedBy() {
+    public String getUpdatedBy() {
         return updatedBy;
     }
 
-    public void setUpdatedBy(int updatedBy) {
+    public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -54,27 +68,27 @@ public abstract class BaseEntity {
         this.uuid = uuid;
     }
 
-    public Date getCreatedAt() {
+    public Long getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(Long createdAt) {
         this.createdAt = createdAt;
     }
 
-    public int getCreatedBy() {
+    public String getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(int createdBy) {
+    public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
-    public Date getUpdatedAt() {
+    public Long getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(Long updatedAt) {
         this.updatedAt = updatedAt;
     }
 }

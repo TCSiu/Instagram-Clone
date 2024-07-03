@@ -1,13 +1,7 @@
 package com.example.instagram.instagram.config;
 
-import com.example.instagram.instagram.model.CustomUserDetails;
-import com.example.instagram.instagram.service.CustomUserDetailsService;
-import com.example.instagram.instagram.service.impl.JwtImpl;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.ILoggerFactory;
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
@@ -19,7 +13,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
-import java.io.IOException;
+import com.example.instagram.instagram.model.CustomUserDetails;
+import com.example.instagram.instagram.service.CustomUserDetailsService;
+import com.example.instagram.instagram.service.impl.JwtImpl;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class JwtAuthenticationFilter  extends OncePerRequestFilter {

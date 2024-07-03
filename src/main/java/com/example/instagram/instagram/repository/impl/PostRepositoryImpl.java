@@ -1,18 +1,14 @@
 package com.example.instagram.instagram.repository.impl;
 
-import com.example.instagram.instagram.Dto.PostDto;
+import org.springframework.stereotype.Repository;
+
 import com.example.instagram.instagram.exception.PostNotFoundException;
-import com.example.instagram.instagram.model.Media;
 import com.example.instagram.instagram.model.Post;
 import com.example.instagram.instagram.repository.PostRepository;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Repository
 public class PostRepositoryImpl implements PostRepository {

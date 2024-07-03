@@ -1,12 +1,13 @@
 package com.example.instagram.instagram.repository.impl;
 
+import org.springframework.stereotype.Repository;
+
 import com.example.instagram.instagram.model.Media;
 import com.example.instagram.instagram.model.Post;
 import com.example.instagram.instagram.repository.MediaRepository;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class MediaRepositoryImpl implements MediaRepository {
