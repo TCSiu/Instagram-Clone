@@ -1,23 +1,16 @@
 package com.example.instagram.instagram.model;
 
-import com.example.instagram.instagram.common.ActionType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "action")
-public class Action extends BaseEntity {
-    @Enumerated(EnumType.STRING)
-    @Column(name = "action")
-    private ActionType action;
-
+@Table(name = "LIKE")
+public class Like extends BaseEntity {
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "POST_UUID", referencedColumnName = "UUID")
@@ -26,21 +19,12 @@ public class Action extends BaseEntity {
     @Column(name = "STATUS")
     private Boolean status;
 
-    public Action() {
+    public Like() {
     }
 
-    public Action(ActionType action, Post post, Boolean status) {
-        this.action = action;
+    public Like(Post post, Boolean status) {
         this.post = post;
         this.status = status;
-    }
-
-    public ActionType getAction() {
-        return action;
-    }
-
-    public void setAction(ActionType action) {
-        this.action = action;
     }
 
     public Post getPost() {

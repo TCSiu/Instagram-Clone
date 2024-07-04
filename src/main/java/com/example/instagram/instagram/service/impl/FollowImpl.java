@@ -1,10 +1,15 @@
 package com.example.instagram.instagram.service.impl;
 
+
+import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.instagram.instagram.common.FollowStatus;
-import com.example.instagram.instagram.exception.FollowRequestAlreadyExistsResponse;
+import com.example.instagram.instagram.exception.FollowRequestAlreadyExistsException;
 import com.example.instagram.instagram.exception.FollowingRequestNotFoundException;
 import com.example.instagram.instagram.exception.FollowingRequestNotOwnerException;
 import com.example.instagram.instagram.model.Follows;
@@ -24,15 +29,20 @@ public class FollowImpl implements FollowService {
     }
 
     @Override
-    public Follows followUser(String userUuid, String currentUserUuid) throws FollowRequestAlreadyExistsResponse {
+    public Follows followUser(String userUuid, String currentUserUuid) throws FollowRequestAlreadyExistsException {
+        Logger logger = LoggerFactory.getLogger(FollowImpl.class);
         User follower = findUser(currentUserUuid);
         User following = findUser(userUuid);
-        if (followRepository.findFollowByFollowerUuidAndFollowingUuid(follower.getUuid(), following.getUuid()).isEmpty()) {
-            Follows follows = new Follows(follower, following, FollowStatus.PENDING);
-            followRepository.save(follows);
-            return follows;
+        logger.info(currentUserUuid + " is following " + userUuid);
+        Optional<Follows> existingFollows = followRepository.findFollowByFollowerUuidAndFollowingUuid(follower.getUuid(), following.getUuid());
+        if (existingFollows.isPresent()) {
+            logger.info("Follow Request Already Exists");
+            throw new FollowRequestAlreadyExistsException("Follow Request Already Exists");
         }
-        throw new FollowRequestAlreadyExistsResponse("Follow Request Already Exists");
+        logger.info(existingFollows.toString());
+        Follows follows = new Follows(follower, following, FollowStatus.PENDING);
+        followRepository.save(follows);
+        return follows;
     }
 
     @Override

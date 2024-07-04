@@ -1,0 +1,21 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: instagram
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+security:
+  jwt:
+    secret-key: 3aefbc1d71566416f9e995c6b7e5a9b810f05edf5a42e6d72ca692437c72eeff
+    expiration-time: 3600000
+storage:
+  path: /var/www/html/Instagram-Clone/src/main/java/com/example/instagram/instagram/storage/image
+

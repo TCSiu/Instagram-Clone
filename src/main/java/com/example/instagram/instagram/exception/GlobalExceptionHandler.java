@@ -1,14 +1,16 @@
 package com.example.instagram.instagram.exception;
 
-import com.example.instagram.instagram.response.error.ErrorResponse;
-import io.jsonwebtoken.ExpiredJwtException;
-import jakarta.servlet.ServletException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import com.example.instagram.instagram.response.error.ErrorResponse;
+
+import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.servlet.ServletException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -68,8 +70,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(exception.getMessage()));
     }
 
-    @ExceptionHandler({FollowRequestAlreadyExistsResponse.class})
-    public ResponseEntity<ErrorResponse> handleFollowRequestAlreadyExistsResponse(FollowRequestAlreadyExistsResponse exception) {
+    @ExceptionHandler({FollowRequestAlreadyExistsException.class})
+    public ResponseEntity<ErrorResponse> handleFollowRequestAlreadyExistsResponse(FollowRequestAlreadyExistsException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(exception.getMessage()));
     }
 
