@@ -40,8 +40,14 @@ class FollowImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         user1 = new User(); // Assume User class has appropriate setters to set properties
+        user1.setUuid("userUuid");
+        userRepository.save(user1);
         user2 = new User();
+        user2.setUuid("currentUserUuid");
+        userRepository.save(user2);
         follow = new Follows(user1, user2, FollowStatus.PENDING);
+        follow.setUuid("requestUuid");
+        followRepository.saveFollows(follow);
     }
 
     @Test
@@ -49,7 +55,7 @@ class FollowImplTest {
         when(userRepository.findByUuid(any(String.class))).thenReturn(Optional.of(user1));
         when(userRepository.findByUuid(any(String.class))).thenReturn(Optional.of(user2));
         when(followRepository.findFollowByFollowerUuidAndFollowingUuid(any(String.class), any(String.class))).thenReturn(Optional.empty());
-        when(followRepository.save(any(Follows.class))).thenReturn(follow);
+        when(followRepository.saveFollows(any(Follows.class))).thenReturn(follow);
 
         Follows result = followService.followUser("userUuid", "currentUserUuid");
         assertEquals(FollowStatus.PENDING, result.getStatus());
@@ -57,7 +63,8 @@ class FollowImplTest {
 
     @Test
     void followUser_Failure_FollowRequestAlreadyExists() {
-        when(userRepository.findByUuid(any(String.class))).thenReturn(Optional.of(user1), Optional.of(user2));
+        when(userRepository.findByUuid(any(String.class))).thenReturn(Optional.of(user1));
+        when(userRepository.findByUuid(any(String.class))).thenReturn(Optional.of(user2));
         // Ensure this returns a non-empty Optional to simulate an existing follow request
         when(followRepository.findFollowByFollowerUuidAndFollowingUuid(any(String.class), any(String.class))).thenReturn(Optional.of(follow));
         // Attempt to create a follow request where one already exists, expecting an exception
@@ -66,9 +73,9 @@ class FollowImplTest {
 
     @Test
     void followRequestApprove_Success() throws FollowingRequestNotOwnerException, FollowingRequestNotFoundException {
-        when(userRepository.findByUuid(any(String.class))).thenReturn(Optional.of(user1));
+        when(userRepository.findByUuid(any(String.class))).thenReturn(Optional.of(user2));
         when(followRepository.findFollowByUuidAndStatus(any(String.class), any(FollowStatus.class))).thenReturn(Optional.of(follow));
-        when(followRepository.save(any(Follows.class))).thenReturn(follow);
+        when(followRepository.saveFollows(any(Follows.class))).thenReturn(follow);
 
         Follows result = followService.followRequestApprove("currentUserUuid", "requestUuid");
         assertEquals(FollowStatus.ACTIVE, result.getStatus());
@@ -76,9 +83,9 @@ class FollowImplTest {
 
     @Test
     void followRequestReject_Success() throws FollowingRequestNotOwnerException, FollowingRequestNotFoundException {
-        when(userRepository.findByUuid(any(String.class))).thenReturn(Optional.of(user1));
+        when(userRepository.findByUuid(any(String.class))).thenReturn(Optional.of(user2));
         when(followRepository.findFollowByUuidAndStatus(any(String.class), any(FollowStatus.class))).thenReturn(Optional.of(follow));
-        when(followRepository.save(any(Follows.class))).thenReturn(follow);
+        when(followRepository.saveFollows(any(Follows.class))).thenReturn(follow);
 
         Follows result = followService.followRequestReject("currentUserUuid", "requestUuid");
         assertEquals(FollowStatus.REJECT, result.getStatus());

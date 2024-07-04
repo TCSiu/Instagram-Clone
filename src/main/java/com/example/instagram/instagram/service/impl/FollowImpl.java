@@ -3,8 +3,6 @@ package com.example.instagram.instagram.service.impl;
 
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -30,18 +28,14 @@ public class FollowImpl implements FollowService {
 
     @Override
     public Follows followUser(String userUuid, String currentUserUuid) throws FollowRequestAlreadyExistsException {
-        Logger logger = LoggerFactory.getLogger(FollowImpl.class);
-        User follower = findUser(currentUserUuid);
-        User following = findUser(userUuid);
-        logger.info(currentUserUuid + " is following " + userUuid);
+        User follower = findUser(userUuid);
+        User following = findUser(currentUserUuid);
         Optional<Follows> existingFollows = followRepository.findFollowByFollowerUuidAndFollowingUuid(follower.getUuid(), following.getUuid());
         if (existingFollows.isPresent()) {
-            logger.info("Follow Request Already Exists");
             throw new FollowRequestAlreadyExistsException("Follow Request Already Exists");
         }
-        logger.info(existingFollows.toString());
         Follows follows = new Follows(follower, following, FollowStatus.PENDING);
-        followRepository.save(follows);
+        followRepository.saveFollows(follows);
         return follows;
     }
 
@@ -64,9 +58,9 @@ public class FollowImpl implements FollowService {
         Follows follow = followRepository.findFollowByUuidAndStatus(requestUuid, FollowStatus.PENDING).orElseThrow(() -> new FollowingRequestNotFoundException("Request Not Found"));
         if (follow.getFollower().equals(follower)) {
             follow.setStatus(status);
-            followRepository.save(follow);
+            followRepository.saveFollows(follow);
             return follow;
         }
-        throw new FollowingRequestNotOwnerException("You Have No Permission Of This Request");
+        throw new FollowingRequestNotOwnerException("You do not have permission to modify this request");
     }
 }

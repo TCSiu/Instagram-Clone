@@ -19,6 +19,7 @@ import com.example.instagram.instagram.model.Post;
 import com.example.instagram.instagram.response.post.PostResponse;
 import com.example.instagram.instagram.response.post.data.PostResponseData;
 import com.example.instagram.instagram.service.MediaService;
+import com.example.instagram.instagram.service.PostLikeService;
 import com.example.instagram.instagram.service.PostService;
 
 import jakarta.validation.Valid;
@@ -28,10 +29,12 @@ import jakarta.validation.Valid;
 public class PostController {
     private final MediaService mediaService;
     private final PostService postService;
+    private final PostLikeService postLikeService;
 
-    public PostController(MediaService mediaService, PostService postService) {
+    public PostController(MediaService mediaService, PostService postService, PostLikeService postLikeService) {
         this.mediaService = mediaService;
         this.postService = postService;
+        this.postLikeService = postLikeService;
     }
 
     @Transactional
@@ -58,6 +61,19 @@ public class PostController {
 
         PostResponseData responseData = new PostResponseData(post);
         PostResponse response = new PostResponse(responseData, "Get Post Successfully. Post Uuid: " + post.getUuid());
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/{post_uuid}/like")
+    @Transactional
+    public ResponseEntity<PostResponse> likePost(@PathVariable String post_uuid) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserUuid = (String) authentication.getPrincipal();
+
+        postLikeService.likePost(post_uuid, currentUserUuid);
+
+        PostResponse response = new PostResponse(null, "Post Liked Successfully");
 
         return ResponseEntity.ok().body(response);
     }

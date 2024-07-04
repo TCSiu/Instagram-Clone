@@ -9,21 +9,27 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "LIKE")
-public class Like extends BaseEntity {
+@Table(name = "POST_LIKE")
+public class PostLike extends BaseEntity {
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "POST_UUID", referencedColumnName = "UUID")
     private Post post;
 
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "USER_UUID", referencedColumnName = "UUID")
+    private User user;
+
     @Column(name = "STATUS")
     private Boolean status;
 
-    public Like() {
+    public PostLike() {
     }
 
-    public Like(Post post, Boolean status) {
+    public PostLike(Post post, User user, Boolean status) {
         this.post = post;
+        this.user = user;
         this.status = status;
     }
 
@@ -42,5 +48,12 @@ public class Like extends BaseEntity {
     public void setStatus(Boolean status) {
         this.status = status;
     }
-    
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

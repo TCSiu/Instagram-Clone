@@ -79,4 +79,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleFollowingRequestNotOwnerException(FollowingRequestNotOwnerException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(exception.getMessage()));
     }
+
+    @ExceptionHandler({UserNoFoundException.class})
+    public ResponseEntity<ErrorResponse> handleUserNoFoundException(UserNoFoundException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(exception.getMessage()));
+    }
 }
