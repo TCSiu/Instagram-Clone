@@ -18,8 +18,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.example.instagram.instagram.Dto.LoginDto;
-import com.example.instagram.instagram.Dto.RegisterDto;
+import com.example.instagram.instagram.dto.LoginRequestDto;
+import com.example.instagram.instagram.dto.RegisterRequestDto;
 import com.example.instagram.instagram.exception.EmailExistsException;
 import com.example.instagram.instagram.exception.EmailNotFoundException;
 import com.example.instagram.instagram.exception.PasswordUnmatchedException;
@@ -52,7 +52,7 @@ class AuthenticationImplTest {
 
     @Test
     void register_Success() {
-        RegisterDto registerDto = new RegisterDto("John Doe", "john@example.com", "password", "password");
+        RegisterRequestDto registerDto = new RegisterRequestDto("John Doe", "john@example.com", "password", "password");
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
         when(userRepository.save(any(User.class))).thenAnswer(i -> i.getArguments()[0]);
@@ -67,14 +67,14 @@ class AuthenticationImplTest {
 
     @Test
     void register_PasswordMismatch_ThrowsException() {
-        RegisterDto registerDto = new RegisterDto("John Doe", "john@example.com", "password", "differentPassword");
+        RegisterRequestDto registerDto = new RegisterRequestDto("John Doe", "john@example.com", "password", "differentPassword");
 
         assertThrows(PasswordUnmatchedException.class, () -> authenticationService.register(registerDto));
     }
 
     @Test
     void register_EmailExists_ThrowsException() {
-        RegisterDto registerDto = new RegisterDto("John Doe", "john@example.com", "password", "password");
+        RegisterRequestDto registerDto = new RegisterRequestDto("John Doe", "john@example.com", "password", "password");
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(new User()));
     
         assertThrows(EmailExistsException.class, () -> authenticationService.register(registerDto));
@@ -82,7 +82,7 @@ class AuthenticationImplTest {
 
     @Test
     void authenticate_Success() {
-        LoginDto loginDto = new LoginDto("john@example.com", "password");
+        LoginRequestDto loginDto = new LoginRequestDto("john@example.com", "password");
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(new User()));
 
         assertDoesNotThrow(() -> authenticationService.authenticate(loginDto));
@@ -90,7 +90,7 @@ class AuthenticationImplTest {
 
     @Test
     void authenticate_EmailNotFound_ThrowsException() {
-        LoginDto loginDto = new LoginDto("nonexistent@example.com", "password");
+        LoginRequestDto loginDto = new LoginRequestDto("nonexistent@example.com", "password");
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
 
         assertThrows(EmailNotFoundException.class, () -> authenticationService.authenticate(loginDto));

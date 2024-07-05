@@ -1,15 +1,15 @@
-package com.example.instagram.instagram.Dto;
+package com.example.instagram.instagram.dto;
 
-public class UserInformationDto extends BaseDto {
+public class UserInformationRequestDto extends BaseDto {
     private String first_name;
     private String last_name;
     private Integer age;
     private String gender;
 
-    public UserInformationDto() {
+    public UserInformationRequestDto() {
     }
 
-    public UserInformationDto(String first_name, String last_name, Integer age, String gender) {
+    public UserInformationRequestDto(String first_name, String last_name, Integer age, String gender) {
         this.first_name = first_name;
         this.last_name = last_name;
         this.age = age;

@@ -1,7 +1,12 @@
 package com.example.instagram.instagram.service.impl;
 
-import com.example.instagram.instagram.Dto.LoginDto;
-import com.example.instagram.instagram.Dto.RegisterDto;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.example.instagram.instagram.dto.LoginRequestDto;
+import com.example.instagram.instagram.dto.RegisterRequestDto;
 import com.example.instagram.instagram.exception.EmailExistsException;
 import com.example.instagram.instagram.exception.EmailNotFoundException;
 import com.example.instagram.instagram.exception.PasswordUnmatchedException;
@@ -10,10 +15,6 @@ import com.example.instagram.instagram.model.UserInformation;
 import com.example.instagram.instagram.repository.UserInformationRepository;
 import com.example.instagram.instagram.repository.UserRepository;
 import com.example.instagram.instagram.service.AuthenticationService;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
 @Service
 public class AuthenticationImpl implements AuthenticationService {
@@ -35,7 +36,7 @@ public class AuthenticationImpl implements AuthenticationService {
     }
 
     @Override
-    public User register(RegisterDto registerDto) {
+    public User register(RegisterRequestDto registerDto) {
         if (!registerDto.getPassword().equals(registerDto.getPassword_confirmation())) {
             throw new PasswordUnmatchedException("Password and Password Confirmation are not the same!");
         }
@@ -58,7 +59,7 @@ public class AuthenticationImpl implements AuthenticationService {
     }
 
     @Override
-    public User authenticate(LoginDto loginDto) {
+    public User authenticate(LoginRequestDto loginDto) {
         User user = userRepository.findByEmail(loginDto.getEmail())
                 .orElseThrow(() -> new EmailNotFoundException("Email Not Found"));
         authenticationManager.authenticate(

@@ -1,13 +1,13 @@
-package com.example.instagram.instagram.Dto;
+package com.example.instagram.instagram.dto;
 
-public class LoginDto extends BaseDto {
+public class LoginRequestDto extends BaseDto {
     private String email;
     private String password;
 
-    public LoginDto() {
+    public LoginRequestDto() {
     }
 
-    public LoginDto(String email, String password) {
+    public LoginRequestDto(String email, String password) {
         this.email = email;
         this.password = password;
     }

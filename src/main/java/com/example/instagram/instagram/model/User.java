@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -18,18 +19,25 @@ import jakarta.persistence.Table;
 @Entity(name = "users")
 @Table(name = "users")
 public class User extends BaseEntity implements CustomUserDetails {
+
     @Column(name = "USERNAME")
     private String loginUsername;
+
     @Column(name = "EMAIL")
     private String email;
+
     @JsonIgnore
     @Column(name = "PASSWORD")
     private String password;
 
-    @OneToMany(mappedBy = "following", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToMany(mappedBy = "target_user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Follows> followers;
-    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Follows> followings;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_information_uuid", referencedColumnName = "uuid")
     private UserInformation userInformation;

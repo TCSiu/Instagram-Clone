@@ -3,7 +3,7 @@ package com.example.instagram.instagram.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.instagram.instagram.Dto.PostDto;
+import com.example.instagram.instagram.dto.PostRequestDto;
 import com.example.instagram.instagram.model.Post;
 import com.example.instagram.instagram.repository.PostRepository;
 import com.example.instagram.instagram.service.PostService;
@@ -14,7 +14,7 @@ public class PostImpl implements PostService {
     private PostRepository postRepository;
 
     @Override
-    public Post savePost(PostDto postDto, String userUuid) {
+    public Post savePost(PostRequestDto postDto, String userUuid) {
         Post post = new Post(postDto.getCaption(), postDto.getLocation(), userUuid);
         return postRepository.savePost(post, userUuid);
     }

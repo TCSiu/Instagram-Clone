@@ -33,14 +33,14 @@ public class FollowController {
     public ResponseEntity<FollowResponse> followUser(@PathVariable(value = "userUuid") String userUuid) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        String currentUserUuid = (String) authentication.getPrincipal();
+        String current_user_uuid = (String) authentication.getPrincipal();
 
-        User user = userService.getUserByUuid(userUuid);
+        User target_user = userService.getUserByUuid(userUuid);
 
-        Follows follow = followService.followUser(userUuid, currentUserUuid);
+        Object follow = followService.followUser(current_user_uuid, target_user.getUuid());
 
         FollowResponseData responseData = new FollowResponseData(follow);
-        FollowResponse response = new FollowResponse(responseData, String.format("Send Follow Request To %s Successfully", user.getUsername()));
+        FollowResponse response = new FollowResponse(responseData, String.format("Send Follow Request To %s Successfully", target_user.getUsername()));
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

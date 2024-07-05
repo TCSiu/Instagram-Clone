@@ -27,16 +27,18 @@ public class FollowImpl implements FollowService {
     }
 
     @Override
-    public Follows followUser(String userUuid, String currentUserUuid) throws FollowRequestAlreadyExistsException {
-        User follower = findUser(userUuid);
-        User following = findUser(currentUserUuid);
-        Optional<Follows> existingFollows = followRepository.findFollowByFollowerUuidAndFollowingUuid(follower.getUuid(), following.getUuid());
-        if (existingFollows.isPresent()) {
-            throw new FollowRequestAlreadyExistsException("Follow Request Already Exists");
-        }
-        Follows follows = new Follows(follower, following, FollowStatus.PENDING);
-        followRepository.saveFollows(follows);
-        return follows;
+    public Object followUser(String current_user_uuid, String target_user_uuid) throws FollowRequestAlreadyExistsException {
+        User current_user = findUser(current_user_uuid);
+        User target_user = findUser(target_user_uuid);
+        Optional<Object> existingFollows = followRepository.findFollowByUserUuidAndTargetUserUuid(current_user.getUuid(), target_user.getUuid());
+        // Optional<Follows> existingFollows = followRepository.findFollowByFollowerUuidAndFollowingUuid(follower.getUuid(), following.getUuid());
+        return existingFollows.get();
+        // if (existingFollows.isPresent()) {
+        //     throw new FollowRequestAlreadyExistsException("Follow Request Already Exists");
+        // }
+        // Follows follows = new Follows(current_user, target_user, FollowStatus.PENDING);
+        // followRepository.save(follows);
+        // return follows;
     }
 
     @Override
@@ -46,7 +48,7 @@ public class FollowImpl implements FollowService {
 
     @Override
     public Follows followRequestReject(String currentUserUuid, String requestUuid) {
-        return updateFollowRequest(currentUserUuid, requestUuid, FollowStatus.REJECT);
+        return updateFollowRequest(currentUserUuid, requestUuid, FollowStatus.DELETE);
     }
 
     private User findUser(String userUuid) {
@@ -54,11 +56,11 @@ public class FollowImpl implements FollowService {
     }
 
     private Follows updateFollowRequest(String currentUserUuid, String requestUuid, FollowStatus status) throws FollowingRequestNotOwnerException, FollowingRequestNotFoundException {
-        User follower = findUser(currentUserUuid);
-        Follows follow = followRepository.findFollowByUuidAndStatus(requestUuid, FollowStatus.PENDING).orElseThrow(() -> new FollowingRequestNotFoundException("Request Not Found"));
-        if (follow.getFollower().equals(follower)) {
+        User target_user = findUser(currentUserUuid);
+        Follows follow = followRepository.findFollowByFollowRequestUuidAndStatus(requestUuid, FollowStatus.PENDING).orElseThrow(() -> new FollowingRequestNotFoundException("Request Not Found"));
+        if (follow.getTarget_user().equals(target_user)) {
             follow.setStatus(status);
-            followRepository.saveFollows(follow);
+            followRepository.save(follow);
             return follow;
         }
         throw new FollowingRequestNotOwnerException("You do not have permission to modify this request");

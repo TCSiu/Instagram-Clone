@@ -9,9 +9,10 @@ import com.example.instagram.instagram.model.Follows;
 
 
 public interface FollowRepository {
-    Optional<Follows> findFollowByFollowerUuidAndFollowingUuid(String followerUuid, String followingUuid);
-    Optional<Follows> findFollowByUuidAndStatus(String followRequestUuid, FollowStatus status);
-    List<Follows> findAllByFollowingUuid(String followingUuid);
-    List<Follows> findAllByFollowerUuid(String followerUuid);
-    Follows saveFollows(Follows follow);
+    Optional<Object> findFollowByUserUuidAndTargetUserUuid(String userUuid, String targetUserUuid);
+    // Optional<Follows> findFollowByFollowerUuidAndFollowingUuid(String followerUuid, String followingUuid);
+    Optional<Follows> findFollowByFollowRequestUuidAndStatus(String followRequestUuid, FollowStatus status);
+    List<Follows> findAllByUserUuid(String userUuid);
+    List<Follows> findAllByTargetUserUuid(String targetUserUuid);
+    Follows save(Follows follow);
 }

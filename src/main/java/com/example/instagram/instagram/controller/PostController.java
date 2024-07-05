@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.instagram.instagram.Dto.PostDto;
+import com.example.instagram.instagram.dto.PostRequestDto;
 import com.example.instagram.instagram.model.Post;
 import com.example.instagram.instagram.response.post.PostResponse;
 import com.example.instagram.instagram.response.post.data.PostResponseData;
@@ -39,7 +39,7 @@ public class PostController {
 
     @Transactional
     @PostMapping("/upload")
-    public ResponseEntity<PostResponse> uploadImage(@Valid PostDto postDto, @RequestParam("media") List<MultipartFile> files) {
+    public ResponseEntity<PostResponse> uploadImage(@Valid PostRequestDto postDto, @RequestParam("media") List<MultipartFile> files) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserUuid = (String) authentication.getPrincipal();
 

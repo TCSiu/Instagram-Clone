@@ -1,21 +1,29 @@
 package com.example.instagram.instagram.model;
 
 import com.example.instagram.instagram.common.FollowStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity(name = "follows")
 @Table(name = "follows")
 public class Follows extends BaseEntity {
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "following_uuid", nullable = false, referencedColumnName = "uuid")
-    private User following;
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "follower_uuid", nullable = false, referencedColumnName = "uuid")
-    private User follower;
+    // @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_uuid", nullable = false, referencedColumnName = "uuid")
+    private User user; // user who is following
+
+    // @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "target_user_uuid", nullable = false, referencedColumnName = "uuid")
+    private User target_user; // user who is being followed
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -24,26 +32,26 @@ public class Follows extends BaseEntity {
     public Follows() {
     }
 
-    public Follows(User following, User follower, FollowStatus status) {
-        this.following = following;
-        this.follower = follower;
+    public Follows(User user, User target_user, FollowStatus status) {
+        this.user = user;
+        this.target_user = target_user;
         this.status = status;
     }
 
-    public User getFollowing() {
-        return following;
+    public User getUser() {
+        return user;
     }
 
-    public void setFollowing(User following) {
-        this.following = following;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public User getFollower() {
-        return follower;
+    public User getTarget_user() {
+        return target_user;
     }
 
-    public void setFollower(User follower) {
-        this.follower = follower;
+    public void setTarget_user(User target_user) {
+        this.target_user = target_user;
     }
 
     public FollowStatus getStatus() {

@@ -1,9 +1,9 @@
-package com.example.instagram.instagram.Dto;
+package com.example.instagram.instagram.dto;
 
 
 import jakarta.validation.constraints.Size;
 
-public class PostDto extends BaseDto {
+public class PostRequestDto extends BaseDto {
     @Size(max = 500, message = "Caption must be less than 500 characters")
     private String caption;
     @Size(max = 100, message = "Location must be less than 100 characters")

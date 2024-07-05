@@ -1,11 +1,11 @@
 package com.example.instagram.instagram.service;
 
-import com.example.instagram.instagram.Dto.LoginDto;
-import com.example.instagram.instagram.Dto.RegisterDto;
+import com.example.instagram.instagram.dto.LoginRequestDto;
+import com.example.instagram.instagram.dto.RegisterRequestDto;
 import com.example.instagram.instagram.model.User;
 
 public interface AuthenticationService {
-    User register(RegisterDto registerDto);
-    User authenticate(LoginDto loginDto);
+    User register(RegisterRequestDto registerDto);
+    User authenticate(LoginRequestDto loginDto);
 
 }

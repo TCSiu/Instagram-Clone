@@ -1,16 +1,16 @@
-package com.example.instagram.instagram.Dto;
+package com.example.instagram.instagram.dto;
 
-public class RegisterDto extends BaseDto {
+public class RegisterRequestDto extends BaseDto {
 
     private String name;
     private String email;
     private String password;
     private String password_confirmation;
 
-    public RegisterDto() {
+    public RegisterRequestDto() {
     }
 
-    public RegisterDto(String name, String email, String password, String password_confirmation) {
+    public RegisterRequestDto(String name, String email, String password, String password_confirmation) {
         this.name = name;
         this.email = email;
         this.password = password;
