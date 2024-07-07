@@ -1,7 +1,6 @@
 package com.example.instagram.instagram.service.impl;
 
-
-import java.util.Optional;
+import java.util.List;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -27,18 +26,23 @@ public class FollowImpl implements FollowService {
     }
 
     @Override
-    public Object followUser(String current_user_uuid, String target_user_uuid) throws FollowRequestAlreadyExistsException {
-        User current_user = findUser(current_user_uuid);
+    public Follows followUser(String current_user_uuid, String target_user_uuid) throws FollowRequestAlreadyExistsException {
+        if (current_user_uuid == null || current_user_uuid.isEmpty() || target_user_uuid == null || target_user_uuid.isEmpty()) {
+            throw new IllegalArgumentException("User UUIDs cannot be null or empty.");
+        }
+        if (current_user_uuid.equals(target_user_uuid)) {
+            throw new IllegalArgumentException("You cannot follow yourself.");
+        }
         User target_user = findUser(target_user_uuid);
-        Optional<Object> existingFollows = followRepository.findFollowByUserUuidAndTargetUserUuid(current_user.getUuid(), target_user.getUuid());
-        // Optional<Follows> existingFollows = followRepository.findFollowByFollowerUuidAndFollowingUuid(follower.getUuid(), following.getUuid());
-        return existingFollows.get();
-        // if (existingFollows.isPresent()) {
-        //     throw new FollowRequestAlreadyExistsException("Follow Request Already Exists");
-        // }
-        // Follows follows = new Follows(current_user, target_user, FollowStatus.PENDING);
-        // followRepository.save(follows);
-        // return follows;
+        User current_user = findUser(current_user_uuid);
+
+        int existingFollowsCount = followRepository.countByUserUuidAndTargetUserUuid(current_user_uuid, target_user_uuid);
+        if (existingFollowsCount > 0) {
+            throw new FollowRequestAlreadyExistsException("Follow Request Already Exists");
+        }
+        Follows follows = new Follows(current_user, target_user, FollowStatus.PENDING);
+        followRepository.save(follows);
+        return follows;
     }
 
     @Override
@@ -51,13 +55,18 @@ public class FollowImpl implements FollowService {
         return updateFollowRequest(currentUserUuid, requestUuid, FollowStatus.DELETE);
     }
 
+    @Override
+    public List<Follows> getFollowsRequestList(String userUuid) {
+        return followRepository.findAllByUserUuid(userUuid);
+    }
+
     private User findUser(String userUuid) {
         return userRepository.findByUuid(userUuid).orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
     }
 
     private Follows updateFollowRequest(String currentUserUuid, String requestUuid, FollowStatus status) throws FollowingRequestNotOwnerException, FollowingRequestNotFoundException {
         User target_user = findUser(currentUserUuid);
-        Follows follow = followRepository.findFollowByFollowRequestUuidAndStatus(requestUuid, FollowStatus.PENDING).orElseThrow(() -> new FollowingRequestNotFoundException("Request Not Found"));
+        Follows follow = followRepository.getFollowRecordByFollowRequestUuidAndStatus(requestUuid, FollowStatus.PENDING).orElseThrow(() -> new FollowingRequestNotFoundException("Request Not Found"));
         if (follow.getTarget_user().equals(target_user)) {
             follow.setStatus(status);
             followRepository.save(follow);

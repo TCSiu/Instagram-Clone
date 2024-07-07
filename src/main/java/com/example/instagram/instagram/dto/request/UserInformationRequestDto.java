@@ -1,4 +1,6 @@
-package com.example.instagram.instagram.dto;
+package com.example.instagram.instagram.dto.request;
+
+import com.example.instagram.instagram.dto.BaseDto;
 
 public class UserInformationRequestDto extends BaseDto {
     private String first_name;

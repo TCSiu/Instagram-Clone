@@ -1,24 +1,16 @@
 package com.example.instagram.instagram.repository.impl;
 
-import org.springframework.stereotype.Repository;
-
 import com.example.instagram.instagram.exception.PostNotFoundException;
 import com.example.instagram.instagram.model.Post;
-import com.example.instagram.instagram.repository.PostRepository;
+import com.example.instagram.instagram.repository.custom.PostRepositoryCustom;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 
-@Repository
-public class PostRepositoryImpl implements PostRepository {
+public class PostRepositoryImpl implements PostRepositoryCustom {
     @PersistenceContext
     private EntityManager entityManager;
-
-    public Post savePost(Post post, String userUuid) {
-        entityManager.persist(post);
-        return post;
-    }
 
     @Override
     public Post getPostByUuid(String postUuid) {

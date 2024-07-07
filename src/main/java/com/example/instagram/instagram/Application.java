@@ -15,11 +15,4 @@ public class Application implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 
 	}
-
-//	@Bean
-//	CommandLineRunner init(StorageService storageService) {
-//		return (args) -> {
-//			storageService.init();
-//		};
-//	}
 }

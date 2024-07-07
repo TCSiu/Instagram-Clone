@@ -18,8 +18,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.example.instagram.instagram.dto.LoginRequestDto;
-import com.example.instagram.instagram.dto.RegisterRequestDto;
+import com.example.instagram.instagram.dto.request.LoginRequestDto;
+import com.example.instagram.instagram.dto.request.RegisterRequestDto;
 import com.example.instagram.instagram.exception.EmailExistsException;
 import com.example.instagram.instagram.exception.EmailNotFoundException;
 import com.example.instagram.instagram.exception.PasswordUnmatchedException;

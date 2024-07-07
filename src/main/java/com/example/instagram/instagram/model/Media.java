@@ -1,19 +1,30 @@
 package com.example.instagram.instagram.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonFilter;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "media")
+@JsonFilter("mediaFilter")
 public class Media extends BaseEntity {
+
     @Column(name = "media_url")
     private String mediaUrl;
+
     @Column(name = "media_type")
     private String mediaType;
-    @JsonIgnore
-    @ManyToOne
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "post_uuid", referencedColumnName = "uuid")
     private Post post;
+    
     @Column(name = "status")
     private Boolean status;
 

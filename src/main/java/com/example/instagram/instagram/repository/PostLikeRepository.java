@@ -1,13 +1,12 @@
 package com.example.instagram.instagram.repository;
 
-import java.util.List; // Add this import statement
-import java.util.Optional; // Add this import statement
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.example.instagram.instagram.model.PostLike;
+import com.example.instagram.instagram.repository.custom.PostLikeRepositoryCustom;
 
-public interface PostLikeRepository {
-    PostLike save(PostLike postLike);
-    Optional<PostLike> findByPostUuidAndUserUuid(String postUuid, String userUuid, Boolean status);
-    List<PostLike> findAllByUserUuid(String userUuid);
-    List<PostLike> findAllByPostUuid(String postUuid);
+@Repository
+public interface PostLikeRepository extends JpaRepository<PostLike, Long>, PostLikeRepositoryCustom {
+    Boolean existsByPostUuidAndUserUuidAndStatus(String postUuid, String userUuid, Boolean status);
 }

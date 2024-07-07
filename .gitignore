@@ -8,6 +8,8 @@ src/main/resources/application.yml
 src/main/resources/application-test.yml
 /storage
 
+instagram.log
+
 ### STS ###
 .apt_generated
 .classpath

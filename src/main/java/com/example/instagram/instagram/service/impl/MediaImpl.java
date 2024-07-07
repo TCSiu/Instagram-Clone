@@ -9,11 +9,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
-import com.example.instagram.instagram.common.StorageProperty;
-import com.example.instagram.instagram.exception.StorageFileNotFoundException;
-import com.example.instagram.instagram.model.Media;
-import com.example.instagram.instagram.model.Post;
-import com.example.instagram.instagram.repository.MediaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -21,9 +16,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.instagram.instagram.common.StorageProperty;
 import com.example.instagram.instagram.exception.StorageException;
 import com.example.instagram.instagram.exception.StorageFileEmptyException;
+import com.example.instagram.instagram.exception.StorageFileNotFoundException;
 import com.example.instagram.instagram.exception.StorageFilePathWrongException;
+import com.example.instagram.instagram.model.Media;
+import com.example.instagram.instagram.model.Post;
+import com.example.instagram.instagram.repository.MediaRepository;
 import com.example.instagram.instagram.service.MediaService;
 
 @Service
@@ -95,5 +95,4 @@ public class MediaImpl implements MediaService {
             throw new StorageFileNotFoundException("Could not read file: " + filename, e);
         }
     }
-    
 }

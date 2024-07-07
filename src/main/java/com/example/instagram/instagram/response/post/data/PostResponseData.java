@@ -1,20 +1,19 @@
 package com.example.instagram.instagram.response.post.data;
 
-import com.example.instagram.instagram.model.Post;
 import com.example.instagram.instagram.response.BaseResponseData;
 
 public class PostResponseData implements BaseResponseData {
-    private Post post;
+    private Object post;
 
-    public PostResponseData(Post post) {
+    public PostResponseData(Object post) {
         this.post = post;
     }
 
-    public Post getPost() {
+    public Object getPost() {
         return post;
     }
 
-    public void setPost(Post post) {
+    public void setPost(Object post) {
         this.post = post;
     }
 }

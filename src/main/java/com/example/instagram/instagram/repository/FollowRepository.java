@@ -1,18 +1,19 @@
 package com.example.instagram.instagram.repository;
 
-
 import java.util.List;
 import java.util.Optional;
 
-import com.example.instagram.instagram.common.FollowStatus;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import com.example.instagram.instagram.model.Follows;
+import com.example.instagram.instagram.repository.custom.FollowRepositoryCustom;
 
+@Repository
+public interface FollowRepository extends JpaRepository<Follows, Long>, FollowRepositoryCustom {
+    Optional<Follows> getFollowByUserUuidAndTargetUserUuid(String userUuid, String targetUserUuid);
+    int countByUserUuidAndTargetUserUuid(String userUuid, String targetUserUuid);
 
-public interface FollowRepository {
-    Optional<Object> findFollowByUserUuidAndTargetUserUuid(String userUuid, String targetUserUuid);
-    // Optional<Follows> findFollowByFollowerUuidAndFollowingUuid(String followerUuid, String followingUuid);
-    Optional<Follows> findFollowByFollowRequestUuidAndStatus(String followRequestUuid, FollowStatus status);
     List<Follows> findAllByUserUuid(String userUuid);
-    List<Follows> findAllByTargetUserUuid(String targetUserUuid);
-    Follows save(Follows follow);
+    List<Follows> findAllByTargetUserUuid(String userUuid);
 }

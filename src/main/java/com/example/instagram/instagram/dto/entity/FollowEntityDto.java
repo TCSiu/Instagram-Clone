@@ -1,4 +1,6 @@
-package com.example.instagram.instagram.dto;
+package com.example.instagram.instagram.dto.entity;
+
+import com.example.instagram.instagram.dto.BaseEntityDto;
 
 public class FollowEntityDto extends BaseEntityDto {
     private String user_uuid;

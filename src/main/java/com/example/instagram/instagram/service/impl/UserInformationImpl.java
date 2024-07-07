@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.example.instagram.instagram.dto.UserInformationRequestDto;
+import com.example.instagram.instagram.dto.request.UserInformationRequestDto;
 import com.example.instagram.instagram.model.User;
 import com.example.instagram.instagram.model.UserInformation;
 import com.example.instagram.instagram.repository.UserInformationRepository;

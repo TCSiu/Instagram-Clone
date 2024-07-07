@@ -31,14 +31,14 @@ public class User extends BaseEntity implements CustomUserDetails {
     private String password;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "target_user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "targetUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Follows> followers;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Follows> followings;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_information_uuid", referencedColumnName = "uuid")
     private UserInformation userInformation;
     public User() {

@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.instagram.instagram.dto.LoginRequestDto;
-import com.example.instagram.instagram.dto.RegisterRequestDto;
+import com.example.instagram.instagram.dto.request.LoginRequestDto;
+import com.example.instagram.instagram.dto.request.RegisterRequestDto;
 import com.example.instagram.instagram.model.User;
 import com.example.instagram.instagram.response.BaseResponse;
 import com.example.instagram.instagram.response.BaseResponseData;

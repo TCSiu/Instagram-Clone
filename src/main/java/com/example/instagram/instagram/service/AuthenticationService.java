@@ -1,7 +1,7 @@
 package com.example.instagram.instagram.service;
 
-import com.example.instagram.instagram.dto.LoginRequestDto;
-import com.example.instagram.instagram.dto.RegisterRequestDto;
+import com.example.instagram.instagram.dto.request.LoginRequestDto;
+import com.example.instagram.instagram.dto.request.RegisterRequestDto;
 import com.example.instagram.instagram.model.User;
 
 public interface AuthenticationService {

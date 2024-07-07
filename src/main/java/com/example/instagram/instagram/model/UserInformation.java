@@ -3,7 +3,7 @@ package com.example.instagram.instagram.model;
 import org.apache.commons.lang3.EnumUtils;
 
 import com.example.instagram.instagram.common.Gender;
-import com.example.instagram.instagram.dto.UserInformationRequestDto;
+import com.example.instagram.instagram.dto.request.UserInformationRequestDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,10 +17,13 @@ import jakarta.persistence.Table;
 public class UserInformation extends BaseEntity {
     @Column(name = "first_name")
     private String firstName;
+
     @Column(name = "last_name")
     private String lastName;
+
     @Column(name = "age")
     private Integer age;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "gender")
     private Gender gender;

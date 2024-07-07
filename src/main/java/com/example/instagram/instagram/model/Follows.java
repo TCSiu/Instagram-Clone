@@ -16,14 +16,14 @@ import jakarta.persistence.Table;
 public class Follows extends BaseEntity {
 
     // @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "user_uuid", nullable = false, referencedColumnName = "uuid")
     private User user; // user who is following
 
     // @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "target_user_uuid", nullable = false, referencedColumnName = "uuid")
-    private User target_user; // user who is being followed
+    private User targetUser; // user who is being followed
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -32,9 +32,9 @@ public class Follows extends BaseEntity {
     public Follows() {
     }
 
-    public Follows(User user, User target_user, FollowStatus status) {
+    public Follows(User user, User targetUser, FollowStatus status) {
         this.user = user;
-        this.target_user = target_user;
+        this.targetUser = targetUser;
         this.status = status;
     }
 
@@ -47,11 +47,11 @@ public class Follows extends BaseEntity {
     }
 
     public User getTarget_user() {
-        return target_user;
+        return targetUser;
     }
 
-    public void setTarget_user(User target_user) {
-        this.target_user = target_user;
+    public void setTarget_user(User targetUser) {
+        this.targetUser = targetUser;
     }
 
     public FollowStatus getStatus() {
