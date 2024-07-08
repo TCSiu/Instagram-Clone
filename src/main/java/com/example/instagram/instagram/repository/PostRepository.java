@@ -11,4 +11,5 @@ import com.example.instagram.instagram.repository.custom.PostRepositoryCustom;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long>, PostRepositoryCustom {
     Optional<Post> findByUuid(String uuid);
+
 }

@@ -6,7 +6,8 @@ target/
 
 src/main/resources/application.yml
 src/main/resources/application-test.yml
-/storage
+src/main/java/com/example/instagram/instagram/storage/image
+/storage/*
 
 instagram.log
 

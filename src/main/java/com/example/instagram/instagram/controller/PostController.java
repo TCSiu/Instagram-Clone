@@ -19,11 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.instagram.instagram.dto.request.CommentRequestDto;
 import com.example.instagram.instagram.dto.request.PostRequestDto;
 import com.example.instagram.instagram.model.Comment;
-import com.example.instagram.instagram.model.Post;
 import com.example.instagram.instagram.response.comment.CommentResponse;
 import com.example.instagram.instagram.response.comment.data.CommentResponseData;
 import com.example.instagram.instagram.response.post.PostResponse;
-import com.example.instagram.instagram.response.post.data.PostResponseData;
 import com.example.instagram.instagram.service.CommentService;
 import com.example.instagram.instagram.service.MediaService;
 import com.example.instagram.instagram.service.PostLikeService;
@@ -48,34 +46,19 @@ public class PostController {
 
     @Transactional
     @PostMapping("/upload")
-    public ResponseEntity<PostResponse> uploadImage(@Valid PostRequestDto postDto, @RequestParam("media") List<MultipartFile> files) {
+    public ResponseEntity<MappingJacksonValue> uploadImage(@Valid PostRequestDto postDto, @RequestParam("media") List<MultipartFile> files) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserUuid = (String) authentication.getPrincipal();
 
-        Post post = postService.savePost(postDto, currentUserUuid);
-        if (!files.isEmpty()) {
-            for (MultipartFile file : files) {
-                mediaService.store(file, post);
-            }
-        }
-
-        PostResponseData responseData = new PostResponseData(post);
-        PostResponse response = new PostResponse(responseData, "Post Created Successfully. Post Uuid: " + post.getUuid());
+        MappingJacksonValue response = postService.savePost(postDto, currentUserUuid, files);
 
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/{post_uuid}")
-    // public Object getPost(@PathVariable String post_uuid) {
-    public MappingJacksonValue getPost(@PathVariable String post_uuid) {
-    // public ResponseEntity<PostResponse> getPost(@PathVariable String post_uuid) {
-        MappingJacksonValue post = postService.getPostByUuid(post_uuid);
-        return post;
-
-        // PostResponseData responseData = new PostResponseData(post);
-        // PostResponse response = new PostResponse(responseData, "Get Post Successfully. Post Uuid: " + post_uuid);
-
-        // return ResponseEntity.ok().body(response);
+    public ResponseEntity<MappingJacksonValue> getPost(@PathVariable String post_uuid) {
+        MappingJacksonValue response = postService.getPostByUuid(post_uuid);
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/{post_uuid}/like")

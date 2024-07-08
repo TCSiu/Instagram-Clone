@@ -1,5 +1,8 @@
 package com.example.instagram.instagram.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +26,11 @@ public class FilterBeanService {
         return filterProvider;
     }
 
-    public static MappingJacksonValue getFilterdValue(SimpleFilterProvider filterProvider, Object dataSet) {
-        MappingJacksonValue jacksonValue = new MappingJacksonValue(dataSet);
+    public static MappingJacksonValue getFilterdValue(SimpleFilterProvider filterProvider, Object dataSet, String message) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("data", dataSet);
+        map.put("message", message);
+        MappingJacksonValue jacksonValue = new MappingJacksonValue(map);
         jacksonValue.setFilters(filterProvider);
         return jacksonValue;
     }
