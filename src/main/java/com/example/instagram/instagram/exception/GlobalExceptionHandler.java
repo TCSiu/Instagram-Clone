@@ -89,4 +89,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(exception.getMessage()));
     }
+
+    @ExceptionHandler({PostAlreadyLikedException.class})
+    public ResponseEntity<ErrorResponse> handlePostAlreadyLikedException(PostAlreadyLikedException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(exception.getMessage()));
+    }
 }

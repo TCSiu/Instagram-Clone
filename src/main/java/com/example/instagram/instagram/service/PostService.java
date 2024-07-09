@@ -6,9 +6,10 @@ import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.instagram.instagram.dto.request.PostRequestDto;
+import com.example.instagram.instagram.model.Post;
 
 public interface PostService {
-    MappingJacksonValue savePost(PostRequestDto postDto, String userUuid, List<MultipartFile> files);
+    Post savePost(PostRequestDto postDto, String userUuid, List<MultipartFile> files);
 
     MappingJacksonValue getPostByUuid(String postUuid);
 }

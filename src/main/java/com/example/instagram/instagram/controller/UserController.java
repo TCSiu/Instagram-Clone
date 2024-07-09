@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,11 +18,8 @@ import com.example.instagram.instagram.dto.request.UserInformationRequestDto;
 import com.example.instagram.instagram.model.User;
 import com.example.instagram.instagram.response.BaseResponse;
 import com.example.instagram.instagram.response.BaseResponseData;
-import com.example.instagram.instagram.response.user.GetMeResponse;
 import com.example.instagram.instagram.response.user.GetUsersResponse;
-import com.example.instagram.instagram.response.user.data.GetMeResponseData;
 import com.example.instagram.instagram.response.user.data.GetUsersResponseData;
-import com.example.instagram.instagram.service.UserInformationService;
 import com.example.instagram.instagram.service.UserService;
 
 @RestController
@@ -30,21 +28,15 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private UserInformationService userInformationService;
-
     @GetMapping("/me")
-    public ResponseEntity<BaseResponse<BaseResponseData>> authenticatedUser() {
+    public ResponseEntity<MappingJacksonValue> authenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         String userUuid = (String) authentication.getPrincipal();
 
-        User currentUser = userService.getUserByUuid(userUuid);
+        MappingJacksonValue currentUser = userService.getUserByUuid(userUuid);
 
-        GetMeResponseData responseData = new GetMeResponseData(currentUser);
-        GetMeResponse response = new GetMeResponse(responseData, "Get user data success!");
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok().body(currentUser);
     }
 
     @GetMapping("")
@@ -58,17 +50,12 @@ public class UserController {
     }
 
     @PostMapping("edit-information")
-    public ResponseEntity<BaseResponse<BaseResponseData>> editUserInformation(@RequestBody UserInformationRequestDto userInformationDto) {
+    public ResponseEntity<MappingJacksonValue> editUserInformation(@RequestBody UserInformationRequestDto userInformationDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         String userUuid = (String) authentication.getPrincipal();
-        User currentUser = userService.getUserByUuid(userUuid);
+        MappingJacksonValue currentUser = userService.editUserInformation(userUuid, userInformationDto);
 
-        userInformationService.editUserInformation(currentUser.getUuid(), userInformationDto);
-
-        GetMeResponseData responseData = new GetMeResponseData(currentUser);
-        GetMeResponse response = new GetMeResponse(responseData, "Get user data success!");
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok().body(currentUser);
     }
 }

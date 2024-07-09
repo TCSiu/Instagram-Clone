@@ -1,9 +1,10 @@
 package com.example.instagram.instagram.service;
 
+import org.springframework.http.converter.json.MappingJacksonValue;
+
 import com.example.instagram.instagram.dto.request.CommentRequestDto;
-import com.example.instagram.instagram.model.Comment;
 
 public interface CommentService {
-    Comment saveComment(CommentRequestDto commentDto, String userUuid, String postUuid, String commentUuid);
-    Comment getCommentByUuid(String commentUuid);
+    MappingJacksonValue saveComment(CommentRequestDto commentDto, String userUuid, String postUuid, String commentUuid);
+    MappingJacksonValue getCommentByUuid(String commentUuid);
 }

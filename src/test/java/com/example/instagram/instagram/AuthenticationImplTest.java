@@ -60,7 +60,7 @@ class AuthenticationImplTest {
         User result = authenticationService.register(registerDto);
 
         assertNotNull(result);
-        assertEquals("John Doe", result.getUsername());
+        assertEquals("John Doe", result.getLoginUsername());
         assertEquals("john@example.com", result.getEmail());
         assertEquals("encodedPassword", result.getPassword());
     }

@@ -18,6 +18,8 @@ import com.example.instagram.instagram.service.MediaService;
 import com.example.instagram.instagram.service.PostService;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class PostImpl implements PostService {
     @Autowired
@@ -30,7 +32,8 @@ public class PostImpl implements PostService {
     private MediaService mediaService;
 
     @Override
-    public MappingJacksonValue savePost(PostRequestDto postDto, String userUuid, List<MultipartFile> files) {
+    @Transactional
+    public Post savePost(PostRequestDto postDto, String userUuid, List<MultipartFile> files) {
         User user = userRepository.findByUuid(userUuid).orElseThrow(() -> new UserNoFoundException("User not found"));
         Post post = new Post(postDto.getCaption(), postDto.getLocation(), user);
         postRepository.save(post);
@@ -39,7 +42,7 @@ public class PostImpl implements PostService {
                 mediaService.store(file, post);
             }
         }
-        return getMappingPost(post, "Post Created Successfully. Post Uuid: " + post.getUuid());
+        return post;
     }
 
     @Override
@@ -52,11 +55,13 @@ public class PostImpl implements PostService {
         String[] mediaFilterFields = { "post", "user" };
         String[] commentFilterFields = { "post", "user" };
         String[] postLikeFilterFields = { "post", "user" };
+        String[] userFilterFields = { "followers", "followings", "userInformation" };
         SimpleFilterProvider filterProvider = FilterBeanService.createFilterProvider();
         filterProvider = FilterBeanService.addEntityFilter(filterProvider, "postFilter", new String[] {});
         filterProvider = FilterBeanService.addEntityFilter(filterProvider, "mediaFilter", mediaFilterFields);
         filterProvider = FilterBeanService.addEntityFilter(filterProvider, "commentFilter", commentFilterFields);
         filterProvider = FilterBeanService.addEntityFilter(filterProvider, "postLikeFilter", postLikeFilterFields);
+        filterProvider = FilterBeanService.addEntityFilter(filterProvider, "userFilter", userFilterFields);
         MappingJacksonValue mapping = FilterBeanService.getFilterdValue(filterProvider, post, message);
         return mapping;
     }

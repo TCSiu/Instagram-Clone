@@ -17,17 +17,17 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email)
+        return userRepository.getUserEntityDtoByEmail(email)
             .orElseThrow(() -> new UsernameNotFoundException("User not found with email " + email));
     }
 
     public UserDetails loadUserByUsernameOrEmail(String usernameOrEmail) throws UsernameNotFoundException {
-        return userRepository.findByLoginUsernameOrEmail(usernameOrEmail, usernameOrEmail)
+        return userRepository.getUserEntityDtoByLoginUsernameOrEmail(usernameOrEmail, usernameOrEmail)
             .orElseThrow(() -> new UsernameNotFoundException("User not found with username or email " + usernameOrEmail));
     }
 
     public UserDetails loadUserByUuid(String userUuid) throws UsernameNotFoundException {
-        return userRepository.findByUuid(userUuid)
+        return userRepository.getUserEntityDtoByUuid(userUuid)
             .orElseThrow(() -> new UsernameNotFoundException("User not found with uuid " + userUuid));
     }
     

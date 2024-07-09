@@ -1,6 +1,7 @@
 package com.example.instagram.instagram.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Service;
 
 import com.example.instagram.instagram.dto.request.CommentRequestDto;
@@ -13,6 +14,8 @@ import com.example.instagram.instagram.repository.CommentRepository;
 import com.example.instagram.instagram.repository.PostRepository;
 import com.example.instagram.instagram.repository.UserRepository;
 import com.example.instagram.instagram.service.CommentService;
+import com.example.instagram.instagram.service.FilterBeanService;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 
 @Service
 public class CommentImpl implements CommentService {
@@ -27,7 +30,7 @@ public class CommentImpl implements CommentService {
     private CommentRepository commentRepository;
 
     @Override
-    public Comment saveComment(CommentRequestDto commentDto, String userUuid, String postUuid, String commentUuid) {
+    public MappingJacksonValue saveComment(CommentRequestDto commentDto, String userUuid, String postUuid, String commentUuid) {
         User user = userRepository.findByUuid(userUuid).orElseThrow(() -> new UserNoFoundException("User not found with UUID: " + userUuid));
         Post post = postRepository.findByUuid(postUuid).orElseThrow(() -> new PostNotFoundException("Post not found with UUID: " + postUuid));
 
@@ -39,11 +42,20 @@ public class CommentImpl implements CommentService {
             commentRepository.addReply(parentComment.getUuid(), newComment.getUuid());
         }
 
-        return newComment;
+        return getMappingComment(newComment, "Comment replied successfully");
     }
 
     @Override
-    public Comment getCommentByUuid(String commentUuid) {
-        return commentRepository.findByUuidAndStatus(commentUuid, true).orElseThrow(() -> new PostNotFoundException("Comment not found with UUID: " + commentUuid));
+    public MappingJacksonValue getCommentByUuid(String commentUuid) {
+        Comment comment = commentRepository.findByUuidAndStatus(commentUuid, true).orElseThrow(() -> new PostNotFoundException("Comment not found with UUID: " + commentUuid));
+        return getMappingComment(comment, "Comment retrieved successfully");
+    }
+
+    protected MappingJacksonValue getMappingComment(Comment comment, String message) {
+        String[] commentFilterFields = { "post", "user" };
+        SimpleFilterProvider filterProvider = FilterBeanService.createFilterProvider();
+        filterProvider = FilterBeanService.addEntityFilter(filterProvider, "commentFilter", commentFilterFields);
+        MappingJacksonValue mapping = FilterBeanService.getFilterdValue(filterProvider, comment, message);
+        return mapping;
     }
 }

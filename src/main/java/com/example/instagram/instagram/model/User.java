@@ -1,10 +1,8 @@
 package com.example.instagram.instagram.model;
 
-import java.util.Collection;
 import java.util.Set;
 
-import org.springframework.security.core.GrantedAuthority;
-
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
@@ -18,7 +16,8 @@ import jakarta.persistence.Table;
 
 @Entity(name = "users")
 @Table(name = "users")
-public class User extends BaseEntity implements CustomUserDetails {
+@JsonFilter("userFilter")
+public class User extends BaseEntity {
 
     @Column(name = "USERNAME")
     private String loginUsername;
@@ -30,17 +29,16 @@ public class User extends BaseEntity implements CustomUserDetails {
     @Column(name = "PASSWORD")
     private String password;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "targetUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Follows> followers;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Follows> followings;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_information_uuid", referencedColumnName = "uuid")
     private UserInformation userInformation;
+
     public User() {
     }
 
@@ -72,36 +70,6 @@ public class User extends BaseEntity implements CustomUserDetails {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    @Override
-    public String getUsername() {
-        return loginUsername;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return CustomUserDetails.super.getAuthorities();
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 
     public Set<Follows> getFollowers() {

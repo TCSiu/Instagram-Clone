@@ -3,6 +3,7 @@ package com.example.instagram.instagram.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.instagram.instagram.exception.PostAlreadyLikedException;
 import com.example.instagram.instagram.exception.PostNotFoundException;
 import com.example.instagram.instagram.exception.UserNoFoundException;
 import com.example.instagram.instagram.model.Post;
@@ -26,25 +27,22 @@ public class PostLikeImpl implements PostLikeService {
     private UserRepository userRepository;
 
     @Override
-    public void likePost(String postUuid, String userUuid) {
+    public void likePost(String postUuid, String userUuid) throws PostAlreadyLikedException, PostNotFoundException, UserNoFoundException {
         Post post = postRepository.findByUuid(postUuid).orElseThrow(() -> new PostNotFoundException("Post not found with UUID: " + postUuid));
         User user = userRepository.findByUuid(userUuid).orElseThrow(() -> new UserNoFoundException("User not found with UUID: " + userUuid));
+        if (isPostLiked(postUuid, userUuid)) {
+            throw new PostAlreadyLikedException(user.getLoginUsername() + " already liked post " + postUuid);
+        }
         PostLike postLike = new PostLike(post, user, true);
         postLikeRepository.save(postLike);
     }
 
     @Override
     public Boolean unlikePost(String postUuid, String userUuid) {
-        if (postLikeRepository.existsByPostUuidAndUserUuidAndStatus(postUuid, userUuid, true)) {
+        if (isPostLiked(postUuid, userUuid)) {
             return postLikeRepository.updateStatus(postUuid, userUuid, false);
         }
         return false;
-    }
-
-    @Override
-    public Boolean isPostLiked(String postUuid, String userUuid) {
-        return postLikeRepository.findByPostUuidAndUserUuid(postUuid, userUuid, true).isPresent();
-
     }
 
     @Override
@@ -56,5 +54,8 @@ public class PostLikeImpl implements PostLikeService {
     public Integer countUserLikes(String userUuid) {
         return postLikeRepository.findAllByUserUuid(userUuid).size();
     }
-    
+
+    protected Boolean isPostLiked(String postUuid, String userUuid) {
+        return postLikeRepository.findByPostUuidAndUserUuidAndStatus(postUuid, userUuid, true).isPresent();
+    }
 }

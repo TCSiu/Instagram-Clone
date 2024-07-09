@@ -31,7 +31,7 @@ public class PostLikeRepositoryImpl implements PostLikeRepositoryCustom {
     }
 
     @Override
-    public Optional<PostLike> findByPostUuidAndUserUuid(String postUuid, String userUuid, Boolean status) {
+    public Optional<PostLike> findByPostUuidAndUserUuidAndStatus(String postUuid, String userUuid, Boolean status) {
         String hql = "FROM PostLike pl WHERE user.uuid = :userUuid AND post.uuid = :postUuid AND pl.status = :status";
         return entityManager.createQuery(hql, PostLike.class)
                 .setParameter("userUuid", userUuid)
